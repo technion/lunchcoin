@@ -1,0 +1,4 @@
+[{<<"enacl">>,
+  {git,"https://github.com/jlouis/enacl.git",
+       {ref,"5a48c66b07192665f81b7baf8513bc7e73fadd45"}},
+  0}].
