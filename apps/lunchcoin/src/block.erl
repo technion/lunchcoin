@@ -28,6 +28,24 @@ makeBlock(Data) ->
     true = ets:insert_new(blockchain, AddBlock#block{hash = blockhash(AddBlock)}).
 
 blockhash(Block) ->
-    {ok, Hash} = enacl:generichash(32, term_to_binary(Block)), % TODO: Better serialize
+    HashData = [Block#block.index, Block#block.timestamp, Block#block.previousHash],
+    {ok, Hash} = enacl:generichash(32, term_to_binary(HashData)),
     Hash.
 
+verifyChain(#block{index = 0, previousHash = PrevHash, hash = Hash}, VerifyHash) ->
+    % Genesis block
+    Hash = VerifyHash,
+    PrevHash = ?EMPTYHASH,
+    ok;
+
+verifyChain(Block = #block{index = BlockIndex, hash = BlockHash}, VerifyHash) ->
+    % Retrieve the previous block.
+    % Note lookup/2 returns a list guaranteed to have on element on an ordered_set
+    [Prev| _Cannot] = ets:lookup(blockchain, ets:prev(blockchain, BlockIndex)),
+    % Verify the block's recorded hash is as recorded on the next block
+    VerifyHash = BlockHash,
+    % Verify the recorded hash is the actual hash
+    VerifyHash = blockhash(Block),
+    % Verify the index is in order
+    BlockIndex = Prev#block.index + 1,
+    verifyChain(Prev, Block#block.previousHash).
