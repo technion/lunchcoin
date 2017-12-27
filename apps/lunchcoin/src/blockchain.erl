@@ -16,7 +16,7 @@
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2,
          terminate/2, code_change/3]).
 
--export([makeblock/2]).
+-export([makeblock/1]).
 %% ------------------------------------------------------------------
 %% API Function Definitions
 %% ------------------------------------------------------------------
@@ -45,7 +45,7 @@ handle_call({makeblock, Data}, _From, State) ->
         {reply, ok, State}
     catch
     error:_Error ->
-        {reply, "Invalid or Compromised Chain", State}
+        {reply, compromised_chain, State}
     end;
 
 handle_call(terminate, _From, State) ->
@@ -67,5 +67,6 @@ terminate(_Reason, _State) ->
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
 
-makeblock(Pid, Data) ->
-    gen_server:call(Pid, {makeblock, Data}).
+makeblock(Data) ->
+    % Utilise local process registry to access registered name of this gen_server
+    gen_server:call(?SERVER, {makeblock, Data}).
