@@ -2,7 +2,12 @@
 
 -include_lib("common_test/include/ct.hrl").
 -export([all/0]).
--export([created_genesis/1, add_blocks/1, corrupt_chain/1, init_per_suite/1, end_per_suite/1]).
+-export([created_genesis/1,
+         add_blocks/1,
+         corrupt_chain/1,
+         init_per_suite/1,
+         end_per_suite/1
+        ]).
 
 init_per_suite(Config) ->
     application:ensure_all_started(lunchcoin),

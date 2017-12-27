@@ -5,9 +5,13 @@
   {mod, { lunchcoin_app, []}},
   {applications,
    [kernel,
-    stdlib
+    stdlib,
+    cowboy,
+    enacl
    ]},
-  {env,[]},
+  {env,[
+      {bind_port, 8083}
+  ]},
   {modules, []},
 
   {maintainers, []},

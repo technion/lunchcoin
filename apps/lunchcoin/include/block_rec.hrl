@@ -1,7 +1,7 @@
 
 -record(block, {index :: non_neg_integer(),
                 timestamp :: integer(),
-                data :: string(),
+                data :: binary(),
                 previousHash :: binary(),
                 hash :: binary() | undefined}).
 

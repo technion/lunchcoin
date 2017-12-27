@@ -24,3 +24,7 @@ You may also run unit tests:
 And Common Test for functional tests:
 
     $ rebar3 ct
+
+Code style strictly meets the Inaka coding guidelines. This can be linted using the Elvis utility:
+
+    $ elvis rock

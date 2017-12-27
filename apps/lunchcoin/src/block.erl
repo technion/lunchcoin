@@ -3,16 +3,16 @@
 
 -include("block_rec.hrl").
 
--define(EMPTYHASH, <<14,87,81,192,38,229,67,178,232,171,46,176,96,153,
-      218,161,209,229,223,71,119,143,119,135,250,171,69,
-      205,241,47,227,168>>). % Hash of empty string
+-define(EMPTYHASH, <<14, 87, 81, 192, 38, 229, 67, 178, 232, 171, 46, 176, 96, 153,
+      218, 161, 209, 229, 223, 71, 119, 143, 119, 135, 250, 171, 69,
+      205, 241, 47, 227, 168>>). % Hash of empty string
 
 -spec genesis() -> #block{}.
 genesis() ->
     Genesis = #block{timestamp = erlang:monotonic_time(),
         index = 0,
-        data = "This is a genesis block", % TODO: What should this say?
-        previousHash = ?EMPTYHASH }, 
+        data = <<"This is a genesis block">>, % TODO: What should this say?
+        previousHash = ?EMPTYHASH },
     Genesis#block{hash = blockhash(Genesis)}.
 
 -spec makeBlock(string(), #block{}) -> #block{}.
@@ -25,7 +25,11 @@ makeBlock(Data, Prev) ->
 
 -spec blockhash(#block{}) -> binary().
 blockhash(Block) ->
-    HashData = [Block#block.index, Block#block.timestamp, Block#block.previousHash],
+    HashData = [Block#block.index,
+        Block#block.timestamp,
+        Block#block.data,
+        Block#block.previousHash
+        ],
     {ok, Hash} = enacl:generichash(32, term_to_binary(HashData)),
     Hash.
 
