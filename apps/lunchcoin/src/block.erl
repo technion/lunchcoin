@@ -9,7 +9,7 @@
 
 -spec genesis() -> #block{}.
 genesis() ->
-    Genesis = #block{timestamp = erlang:monotonic_time(),
+    Genesis = #block{timestamp = erlang:monotonic_time(second) - 4320,
         index = 0,
         data = <<"This is a genesis block">>, % TODO: What should this say?
         previousHash = ?EMPTYHASH },
@@ -17,7 +17,7 @@ genesis() ->
 
 -spec makeBlock(string(), #block{}) -> #block{}.
 makeBlock(Data, Prev) ->
-    AddBlock = #block{timestamp = erlang:monotonic_time(),
+    AddBlock = #block{timestamp = erlang:monotonic_time(second),
         index = Prev#block.index + 1,
         data = Data,
         previousHash = Prev#block.hash },

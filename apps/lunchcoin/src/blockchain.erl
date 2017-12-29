@@ -2,6 +2,7 @@
 -behaviour(gen_server).
 -define(SERVER, ?MODULE).
 
+-include_lib("stdlib/include/ms_transform.hrl").
 -include("block_rec.hrl").
 %% ------------------------------------------------------------------
 %% API Function Exports
@@ -16,7 +17,7 @@
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2,
          terminate/2, code_change/3]).
 
--export([makeblock/1]).
+-export([makeblock/1, gettoday/0]).
 %% ------------------------------------------------------------------
 %% API Function Definitions
 %% ------------------------------------------------------------------
@@ -48,6 +49,23 @@ handle_call({makeblock, Data}, _From, State) ->
         {reply, compromised_chain, State}
     end;
 
+handle_call(gettoday, _From, State) ->
+    % Verify the chain before proceeding
+    [Last| _Cannot] = ets:lookup(blockchain, ets:last(blockchain)),
+    try block:verifyChain(Last, Last#block.hash) of
+    ok ->
+        T = erlang:monotonic_time(second),
+        K = ets:fun2ms(
+            fun(_B = #block{timestamp = Timestamp, data = Data}) 
+                when Timestamp > (T - 3600) -> Data 
+            end),
+        Orders = ets:select(blockchain, K),
+        {reply, Orders, State}
+    catch
+    error:_Error ->
+        {reply, compromised_chain, State}
+    end;
+
 handle_call(terminate, _From, State) ->
     {stop, normal, ok, State};
 
@@ -70,3 +88,6 @@ code_change(_OldVsn, State, _Extra) ->
 makeblock(Data) ->
     % Utilise local process registry to access registered name of this gen_server
     gen_server:call(?SERVER, {makeblock, Data}).
+
+gettoday() ->
+    gen_server:call(?SERVER, gettoday).

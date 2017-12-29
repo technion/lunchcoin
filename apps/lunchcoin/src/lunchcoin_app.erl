@@ -18,7 +18,7 @@ start(_StartType, _StartArgs) ->
     {ok, _Pid} = blockchain:start_link(),
     Dispatch = cowboy_router:compile([
         {'_', [
-            {"/api", api_handler, []}
+            {"/api/[...]", api_handler, []}
         ]}
     ]),
     {ok, Port} = application:get_env(lunchcoin, bind_port),

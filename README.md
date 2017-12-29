@@ -5,6 +5,11 @@ A blockchain designed to managing lunch and coffee orders.
 
 All blockchain algorithms are implemented internally.
 
+API
+---
+
+The application is designed with a decoupled frontend/backend. The API is managed with the OpenAPI standard on [Swaggerhub](https://app.swaggerhub.com/apis/Lolware/Lunchcoin/1.0.0) where it can be interacted with and tested.
+
 Build
 -----
 
