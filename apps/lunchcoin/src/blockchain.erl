@@ -39,9 +39,9 @@ init(_Args) ->
 handle_call({makeblock, Data}, _From, State) ->
     % Insert a new block only if the chain is intact
     [Last| _Cannot] = ets:lookup(blockchain, ets:last(blockchain)),
-    try block:verifyChain(Last, Last#block.hash) of
+    try block:verify_chain(Last, Last#block.hash) of
     ok ->
-        NewBlock = block:makeBlock(Data, Last),
+        NewBlock = block:make_block(Data, Last),
         true = ets:insert_new(blockchain, NewBlock),
         {reply, ok, State}
     catch
@@ -52,12 +52,12 @@ handle_call({makeblock, Data}, _From, State) ->
 handle_call(gettoday, _From, State) ->
     % Verify the chain before proceeding
     [Last| _Cannot] = ets:lookup(blockchain, ets:last(blockchain)),
-    try block:verifyChain(Last, Last#block.hash) of
+    try block:verify_chain(Last, Last#block.hash) of
     ok ->
         T = erlang:monotonic_time(second),
         K = ets:fun2ms(
-            fun(_B = #block{timestamp = Timestamp, data = Data}) 
-                when Timestamp > (T - 3600) -> Data 
+            fun(_B = #block{timestamp = Timestamp, data = Data})
+                when Timestamp > (T - 3600) -> Data
             end),
         Orders = ets:select(blockchain, K),
         {reply, Orders, State}

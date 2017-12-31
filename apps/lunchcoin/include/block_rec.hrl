@@ -4,4 +4,4 @@
                 data :: binary(),
                 previousHash :: binary(),
                 hash :: binary() | undefined}).
-
+-type block() :: #block{}.
