@@ -6,14 +6,16 @@
          add_blocks/1,
          corrupt_chain/1,
          init_per_suite/1,
+         get_orders/1,
          end_per_suite/1
         ]).
 
 init_per_suite(Config) ->
     application:ensure_all_started(lunchcoin),
+    inets:start(),
     Config.
 
-all() -> [created_genesis, add_blocks, corrupt_chain].
+all() -> [created_genesis, add_blocks, get_orders, corrupt_chain].
 
 created_genesis(_Config) ->
     1 = length(ets:tab2list(blockchain)).
@@ -26,6 +28,14 @@ add_blocks(_Config) ->
 corrupt_chain(_Config) ->
     ets:delete(blockchain, 1),
     compromised_chain = blockchain:makeblock("This should fail").
+
+get_orders(_Config) ->
+    {ok, Port} = application:get_env(lunchcoin, bind_port),
+    URL = "http://localhost:" ++ integer_to_list(Port) ++ "/api/orders",
+    {ok, {{_Version, 200, "OK"}, _Headers, Body}} =
+        httpc:request(get, {URL, []}, [], []),
+    % Should show the blocks added - but genesis is exempt from order list
+    Body = "[\"Adding a block\",\"Adding a third block\"]".
 
 end_per_suite(_Config) ->
     application:stop(lunchcoin).
