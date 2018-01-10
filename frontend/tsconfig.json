@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "jsx": "react",
+        "declaration": false,
+        "strict": true,
+        "noImplicitThis": true,
+        "removeComments": true,
+        "noLib": false,
+        "preserveConstEnums": true,
+        "sourceMap": true,
+        "typeRoots": ["./node_modules/@types"]
+    }
+}

@@ -27,44 +27,10 @@
 </head>
 <body>
 
-<div class="ui middle aligned center aligned grid">
-  <div class="column">
-    <h2 class="ui teal image header">
-      <img src="assets/images/logo.png" class="image">
-      <div class="content">
-        Enter your order details
-      </div>
-    </h2>
-    <form class="ui large form" method="post" action="/api/new">
-      <div class="ui stacked segment">
-        <div class="field">
-          <div class="ui left icon input">
-            <i class="user icon"></i>
-            <input type="text" name="name" placeholder="Your Name">
-          </div>
-        </div>
-        <div class="field">
-          <div class="ui left icon input">
-            <i class="lock icon"></i>
-            <input type="text" name="order" placeholder="Password">
-          </div>
-        </div>
-        <input type="submit" class="ui fluid large teal submit button" value="Order">
-      </div>
-
-      <div class="ui error message"></div>
-
-    </form>
-
-    <div class="ui message">
-      <a href="/api/orders">Looking for today's orders? Click Here</a>
-    </div>
-    <div class="ui message">
-      <a href="/api/blockchain">Dump the whole blockchain</a>
-    </div>
-  </div>
+<div id="content" class="ui middle aligned center aligned grid">
 </div>
 
+<script src="lunchcoin.js" type="text/javascript"></script>
 </body>
 
 </html>
