@@ -1,48 +1,71 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-interface LunchFormProps {
-  onOrderSubmit: (data: string) => void;
+import { LunchForm } from "./lunchform.tsx";
+
+interface MiningProps {
+  data: string;
 }
 
+interface MiningState {
+  show: "mining" | "mined" | "error";
+}
 
-class LunchForm extends React.Component<LunchFormProps, {}> {
-  constructor(props: LunchFormProps) {
+class Mining extends React.Component<MiningProps, MiningState> {
+  constructor(props: MiningProps) {
     super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.state = {
+      show: "mining",
+    }
   }
 
-  handleSubmit(e: any) {
-    e.preventDefault();
-    this.props.onOrderSubmit("new order");
+  public componentDidMount() {
+    fetch(
+      "https://lunchcoin.lolware.net/api/new", {
+      body: JSON.stringify(this.props.data),
+      method: "POST",
+    }).then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response returned "
+        + response.status);
+      }
+      console.log("Logged coin");
+      this.setState({...this.state, show: "mined" });
+    }).catch((err) => {
+      this.setState({...this.state, show: "error" });
+      console.error(err.message);
+    });
   }
 
   public render() {
-    return (
-    <form className="ui large form" method="post" action="/api/new" onSubmit={this.handleSubmit}>
-      <div className="ui stacked segment">
-        <div className="field">
-          <div className="ui left icon input">
-            <i className="user icon"></i>
-            <input type="text" name="name" placeholder="Your Name" />
-          </div>
-        </div>
-        <div className="field">
-          <div className="ui left icon input">
-            <i className="lock icon"></i>
-            <input type="text" name="order" placeholder="Password" />
-          </div>
-        </div>
-        <input type="submit" className="ui fluid large teal submit button" value="Order" />
-      </div>
-    </form>
-    );
+    switch(this.state.show) {
+      case "mining":
+      return (
+        "mining"
+      )
+      case "mined":
+      return (
+        "mined"
+      )
+      default: // Default is always an error case
+      return (
+        "Error mining coin"
+      )
+    }
   }
+}
 
+class Mined extends React.Component<{}, {}> {
+  public render() {
+    return (
+      "mined"
+    )
+  }
 }
 
 interface MainComponentState {
-  showData: "form" | "mining";
+  show: "form" | "mining";
+  data: string;
 }
 
 class MainContent extends React.Component<{}, MainComponentState> {
@@ -50,22 +73,23 @@ class MainContent extends React.Component<{}, MainComponentState> {
     super(props);
     this.submitOrder = this.submitOrder.bind(this);
     this.state = {
-      showData: "form"
+      show: "form",
+      data: "undefined"
     };
   }
 
-  submitOrder(data: string) {
-    this.setState({...this.state, showData: "mining" });
+  public submitOrder(data: string) {
+    this.setState({...this.state, show: "mining", data: data});
   }
 
   public render() {
     let renderdata;
-    switch(this.state.showData) {
+    switch(this.state.show) {
       case "form":
       renderdata = <LunchForm onOrderSubmit={this.submitOrder} />;
       break;
       case "mining":
-      renderdata = <Mining>
+      renderdata = <Mining data={this.state.data} />
       break;
       default:
       console.error("Major failure");
