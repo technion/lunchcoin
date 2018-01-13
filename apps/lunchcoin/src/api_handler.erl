@@ -3,10 +3,26 @@
 
 -export([init/2]).
 
+-spec binary_join([binary()], binary()) -> binary().
+% Largely taken from https://coderwall.com/p/nmajna/joining-a-list-of-binaries-in-erlang
+binary_join([], _Sep) ->
+    <<>>;
+binary_join([Part], _Sep) ->
+    Part;
+binary_join(List, Sep) ->
+    lists:foldr(fun (A, B) ->
+        case bit_size(B) > 0 of
+        true -> 
+            <<A/binary, Sep/binary, B/binary>>;
+        _ -> A
+    end
+  end, <<>>, List).
+
 init(Req0 = #{method:=<<"GET">>, path:=<<"/api/orders">>}, State) ->
     Req = cowboy_req:reply(200,
         #{<<"content-type">> => <<"text/plain; charset=utf-8">>},
-        io_lib:format("~p", [blockchain:gettoday()]), Req0),
+        binary_join(blockchain:gettoday(), <<$\n>>),
+        Req0),
     {ok, Req, State};
 
 init(Req0 = #{method:=<<"GET">>, path:=<<"/api/blockchain">>}, State) ->

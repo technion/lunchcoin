@@ -14,6 +14,7 @@ class MainContent extends React.Component<{}, MainComponentState> {
   constructor(props: {}) {
     super(props);
     this.submitOrder = this.submitOrder.bind(this);
+    this.showOrders = this.showOrders.bind(this);
     this.state = {
       show: "form",
       data: "undefined",
@@ -24,7 +25,8 @@ class MainContent extends React.Component<{}, MainComponentState> {
     this.setState({...this.state, show: "mining", data});
   }
 
-  public showOrders() {
+  public showOrders(e: any) {
+    e.preventDefault();
     this.setState({...this.state, show: "orders"});
   }
 
@@ -39,6 +41,7 @@ class MainContent extends React.Component<{}, MainComponentState> {
       break;
       case "orders":
       renderdata = <Orders />;
+      break;
       default:
       console.error("Major failure");
     }
@@ -46,7 +49,7 @@ class MainContent extends React.Component<{}, MainComponentState> {
     return (
       <div> { renderdata } 
     <div className="ui message">
-      <a href="/api/orders">Looking for today's orders? Click Here</a>
+      <a href="#" onClick={this.showOrders}>Looking for today's orders? Click Here</a>
     </div>
     </div>
     );

@@ -13,7 +13,8 @@ export class LunchForm extends React.Component<LunchFormProps, {}> {
 
   public handleSubmit(e: any) {
     e.preventDefault();
-    this.props.onOrderSubmit(JSON.stringify({name: e.target.name.value.trim(), order: "order"}));
+    this.props.onOrderSubmit(JSON.stringify(
+      {name: e.target.name.value.trim(), order: e.target.order.value.trim()}));
   }
 
   public render() {

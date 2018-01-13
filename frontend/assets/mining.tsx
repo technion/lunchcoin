@@ -22,7 +22,10 @@ export class Mining extends React.Component<MiningProps, MiningState> {
   public componentDidMount() {
     fetch(
       "https://lunchcoin.lolware.net/api/new", {
-      body: JSON.stringify(this.props.data),
+      body: this.props.data,
+      headers: new Headers({
+        'Content-Type': 'application/json'
+        }),
       method: "POST",
     }).then((response) => {
       if (!response.ok) {
