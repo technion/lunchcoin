@@ -3,21 +3,6 @@
 
 -export([init/2]).
 
--spec binary_join([binary()], binary()) -> binary().
-% Largely taken from https://coderwall.com/p/nmajna/joining-a-list-of-binaries-in-erlang
-binary_join([], _Sep) ->
-    <<>>;
-binary_join([Part], _Sep) ->
-    Part;
-binary_join(List, Sep) ->
-    lists:foldr(fun (A, B) ->
-        case bit_size(B) > 0 of
-        true -> 
-            <<A/binary, Sep/binary, B/binary>>;
-        _ -> A
-    end
-  end, <<>>, List).
-
 init(Req0 = #{method:=<<"GET">>, path:=<<"/api/orders">>}, State) ->
     Req = cowboy_req:reply(200,
         #{<<"content-type">> => <<"text/plain; charset=utf-8">>},
@@ -43,3 +28,27 @@ init(Req0 = #{method:=<<"POST">>, path:=<<"/api/new">>}, State) ->
         cowboy_req:reply(400, #{}, <<"Bad Request">>, Req0)
     end,
     {ok, Req2, State}.
+
+-spec binary_join([binary()], binary()) -> binary().
+% Largely taken from https://coderwall.com/p/nmajna/joining-a-list-of-binaries-in-erlang
+binary_join([], _Sep) ->
+    <<>>;
+binary_join([Part], _Sep) ->
+    Part;
+binary_join(List, Sep) ->
+    lists:foldr(fun (A, B) ->
+        case bit_size(B) > 0 of
+        true ->
+            <<A/binary, Sep/binary, B/binary>>;
+        _ -> A
+    end
+  end, <<>>, List).
+
+-ifdef(TEST).
+-include_lib("eunit/include/eunit.hrl").
+
+binary_join_test() ->
+    ?assertEqual(<<>>, binary_join([], <<$\n>>)),
+    ?assertEqual(<<"One">>, binary_join([<<"One">>], <<$\n>>)),
+    ?assertEqual(<<"Hello world">>, binary_join([<<"Hello">>, <<"world">>], <<" ">>)).
+-endif.

@@ -85,6 +85,7 @@ terminate(_Reason, _State) ->
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
 
+-spec makeblock(binary()) -> ok.
 makeblock(Data) ->
     % Utilise local process registry to access registered name of this gen_server
     gen_server:call(?SERVER, {makeblock, Data}).

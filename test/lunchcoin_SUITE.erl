@@ -21,13 +21,13 @@ created_genesis(_Config) ->
     1 = length(ets:tab2list(blockchain)).
 
 add_blocks(_Config) ->
-    ok = blockchain:makeblock("Adding a block"),
-    ok = blockchain:makeblock("Adding a third block"),
+    ok = blockchain:makeblock(<<"Adding a block">>),
+    ok = blockchain:makeblock(<<"Adding a third block">>),
     3 = length(ets:tab2list(blockchain)).
 
 corrupt_chain(_Config) ->
     ets:delete(blockchain, 1),
-    compromised_chain = blockchain:makeblock("This should fail").
+    compromised_chain = blockchain:makeblock(<<"This should fail">>).
 
 get_orders(_Config) ->
     {ok, Port} = application:get_env(lunchcoin, bind_port),
@@ -35,7 +35,7 @@ get_orders(_Config) ->
     {ok, {{_Version, 200, "OK"}, _Headers, Body}} =
         httpc:request(get, {URL, []}, [], []),
     % Should show the blocks added - but genesis is exempt from order list
-    Body = "[\"Adding a block\",\"Adding a third block\"]".
+    "Adding a block\nAdding a third block" = Body.
 
 end_per_suite(_Config) ->
     application:stop(lunchcoin).
