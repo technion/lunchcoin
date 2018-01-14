@@ -24,7 +24,7 @@ export class Mining extends React.Component<MiningProps, MiningState> {
       "https://lunchcoin.lolware.net/api/new", {
       body: this.props.data,
       headers: new Headers({
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
         }),
       method: "POST",
     }).then((response) => {

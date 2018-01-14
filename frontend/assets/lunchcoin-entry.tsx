@@ -47,11 +47,11 @@ class MainContent extends React.Component<{}, MainComponentState> {
     }
 
     return (
-      <div> { renderdata } 
-    <div className="ui message">
-      <a href="#" onClick={this.showOrders}>Looking for today's orders? Click Here</a>
-    </div>
-    </div>
+      <div> { renderdata }
+        <div className="ui message">
+          <a href="#" onClick={this.showOrders}>Looking for today's orders? Click Here</a>
+        </div>
+      </div>
     );
   }
 }
