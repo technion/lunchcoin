@@ -1,6 +1,8 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
+import { ResultMsg } from "./resultmsg.tsx";
+
 interface OrdersState {
   data: string[];
 }
@@ -36,7 +38,7 @@ export class Orders extends React.Component<{}, OrdersState>  {
 
   public render() {
     if (this.state.data.length === 1 && this.state.data[0] === "initial") {
-      return "Polling blockchain";
+      return <ResultMsg data="Polling blockchain" />;
     }
 
     // Turn JSON strings into objects
@@ -49,7 +51,7 @@ export class Orders extends React.Component<{}, OrdersState>  {
             throw new Error("Failed JSON parse");
           }
           return (
-            <div key={index}> {nodeparsed.name}</div>
+            <div key={index}> {nodeparsed.name} ordered {nodeparsed.order}</div>
             );
         } catch (e) {
           console.error("Failed to parse " + node);
@@ -59,7 +61,7 @@ export class Orders extends React.Component<{}, OrdersState>  {
     // Filter out any parse failures
     ordernodes = ordernodes.filter( (x) => { return x; });
     if (ordernodes.length === 0) {
-      return "No orders yet";
+      return <ResultMsg data="No orders yet" />;
     }
 
     return ordernodes;

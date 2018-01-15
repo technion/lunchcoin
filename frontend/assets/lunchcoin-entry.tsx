@@ -70,6 +70,9 @@ export class App extends React.Component<{}, {}> {
       <div className="ui message">
         <a href="/api/blockchain">Dump the whole blockchain</a>
       </div>
+      <div className="ui message">
+        <a href="https://github.com/technion/lunchcoin">Application source</a>
+      </div>
       </div>
       );
   }

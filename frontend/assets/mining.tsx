@@ -2,6 +2,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 
 import { LunchForm } from "./lunchform.tsx";
+import { ResultMsg } from "./resultmsg.tsx";
 
 interface MiningProps {
   data: string;
@@ -68,8 +69,6 @@ export class Mining extends React.Component<MiningProps, MiningState> {
 
 class Mined extends React.Component<{}, {}> {
   public render() {
-    return (
-      "mined successfully"
-    );
+    return <ResultMsg data="Transaction logged on blockchain" />;
   }
 }
