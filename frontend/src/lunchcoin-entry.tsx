@@ -60,8 +60,8 @@ export class App extends React.Component<{}, {}> {
   public render() {
     return (
       <div className="column">
+      <img src="https://d86c84grgz45x.cloudfront.net/lunchcoin/images/hotdogs.svg" className="image" alt="Lunchcoin Hotdogs" height="256" width="256" />
       <h2 className="ui teal image header">
-        <img src="assets/images/logo.png" className="image" />
         <div className="content">
            Blockchain Lunch and Coffee Ordering
         </div>

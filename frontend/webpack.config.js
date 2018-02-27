@@ -2,7 +2,8 @@ const webpack = require('webpack');
 
 module.exports = {
   context: __dirname,
-  entry: "./assets/lunchcoin-entry.tsx",
+  mode: "development",
+  entry: "./src/lunchcoin-entry.tsx",
   devtool: "inline-source-map",
   resolve: {
     extensions: [".tsx", ".js", ".d.ts"]
@@ -13,17 +14,17 @@ module.exports = {
   },
   module: {
     rules: [
-	  {
+	    {
         test: /\.tsx$/,
         exclude: /node_modules/,
-        loaders: ["ts-loader"],
+        use: ["ts-loader"],
       },
       {
-        enforce: "pre",
-        test: /\.js$/,
-        loader: "source-map-loader"
-      }
-	],
+        test:   /\.js$/,
+        use: ["source-map-loader"],
+        enforce: "pre"
+      },
+    ],
   },
 }
 console.log("webpack running:");
